@@ -9,13 +9,13 @@ import org.junit.Test;
 
 /**
  * @author Emi Kalendra
- *
+ * 
  */
 public class TempMainTest {
 
 	@Test
-	public void testTest(){
+	public void testTest() {
 		assertTrue(true);
-		//fail();
+		// fail();
 	}
 }
