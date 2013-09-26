@@ -1,0 +1,143 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+buildDir = 'output'
+project.ext.fixedLibDir = file('lib')
+project.ext.stagingDir = file('staging')
+project.ext.toStagingDir = file(new File(buildDir, project.name))
+project.ext.toStagingLibsDir = file(new File(toStagingDir, 'lib'))
+
+project.ext.libDeploy = file(new File(buildDir, 'lib-deploy'))
+
+repositories {
+	mavenCentral()
+}
+
+sourceSets {
+	main {
+		java {
+			// enable this if we want extra source code in the directory structure isolated
+			//srcDir "${projectDir}/src/extra/java/"
+		}
+	}
+}
+
+// http://search.maven.org/
+// http://mvnrepository.com/
+
+dependencies {
+	// logging framework
+	// This should be used so messages can be customized at runtime
+	compile 'org.slf4j:slf4j-api:1.7.2'
+	//compile 'org.slf4j:log4j-over-slf4j:1.6.6'
+	//compile 'org.slf4j:jcl-over-slf4j:1.6.6'
+	compile 'ch.qos.logback:logback-classic:1.0.7'
+	compile 'ch.qos.logback:logback-core:1.0.7'
+
+	// args4j is used to setup the command line args
+	// http://args4j.kohsuke.org
+	// http://mvnrepository.com/artifact/args4j/args4j
+	compile 'args4j:args4j:2.0.24'
+
+	// https://code.google.com/p/guava-libraries/
+	// google i/o library
+	// Has some really good stuff that we should use
+	compile 'com.google.guava:guava:14.0.1'
+
+	compile 'org.apache.commons:commons-lang3:3.1';
+
+	// Good time library to have.
+	compile 'joda-time:joda-time:2.1'
+
+	// commons math has lots of good math functions to use
+	// http://mvnrepository.com/artifact/org.apache.commons/commons-math3/3.2
+	// http://commons.apache.org/proper/commons-math/userguide/stat.html
+	compile 'org.apache.commons:commons-math3:3.2'
+
+
+	// JSON library
+	// Basic library is directly included in the extra folder
+	//compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.8'
+
+	compile 'commons-io:commons-io:2.4'
+
+	// For dependancy injection
+	// This is the way to go
+	//compile 'com.google.inject:guice:3.0'
+	//compile 'com.google.inject.extensions:guice-assistedinject:3.0'
+
+
+	// includes all the libraries that are in the lib folder
+	// this is an easy way to include them
+	compile fileTree(dir: 'lib', include: '*.jar')
+
+	// The testing framework to include
+	testCompile 'junit:junit:4.+'
+
+
+
+	// Other stuff that we may want to use...
+	// commented out until needed
+
+	// if we want to use mongoDB
+	// compile 'org.mongodb:mongo-java-driver:2.11.2'
+
+	//compile 'org.acegisecurity:acegi-security:1.0.7'
+
+	//http://commons.apache.org/sandbox/commons-cli2/index.html
+	//http://commons.apache.org/proper/commons-cli/index.html
+	// should look into where we can get 2 (although this seems pretty basic)
+	// compile 'commons-cli:commons-cli:1.2'
+
+	//compile 'org.apache.httpcomponents:httpclient:4.2.3'
+	//compile 'org.apache.httpcomponents:httpmime:4.2.3'
+}
+
+
+task staging(type: Sync) {
+	from(stagingDir) {}
+	into toStagingDir
+}
+
+task syncJars(type: Sync) {
+	from(configurations.compile) {}
+	from(fixedLibDir) {}
+	into toStagingLibsDir
+}
+
+task copyMainJar(type: Copy) {
+	from(libsDir) {}
+	into toStagingLibsDir
+}
+
+task myZip(type: Tar) {
+	archiveName project.name+'.tar.gz'
+	from(buildDir) {
+		include project.name+'/**'
+	}
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+	destinationDir = libDeploy
+	classifier = 'sources'
+	from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+	destinationDir = libDeploy
+	classifier = 'javadoc'
+	from javadoc.destinationDir
+}
+
+artifacts {
+	archives sourcesJar
+	// uncommenting the line below will build the java doc as part of the build process
+	// this can also be called with javadocJar or javadocjar
+	// this can add some additional time to the build process
+	// archives javadocJar
+}
+
+syncJars.dependsOn('staging')
+copyMainJar.dependsOn('syncJars')
+myZip.dependsOn('copyMainJar')
+assemble.dependsOn('myZip')
