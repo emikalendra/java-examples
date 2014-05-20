@@ -8,6 +8,9 @@ public class Example02 {
         Cat myCat = new Cat("reko", "white");
         myCat.sayHi();
         System.out.println("get name by getter: " + myCat.getName());
+
+        System.out.println("returnString: " + myCat.returnString());
+        System.out.println("give back: " + myCat.giveMeWhatIGiveYou("something in"));
     }
 }
 
@@ -22,6 +25,15 @@ class Cat {
 
     public String getName() {
         return name;
+    }
+
+    public String returnString() {
+        String newString = "something";
+        return newString;
+    }
+
+    public String giveMeWhatIGiveYou(String input) {
+        return input;
     }
 
     public void sayHi() {
