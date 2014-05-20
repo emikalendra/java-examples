@@ -37,29 +37,29 @@ dependencies {
 	// args4j is used to setup the command line args
 	// http://args4j.kohsuke.org
 	// http://mvnrepository.com/artifact/args4j/args4j
-	compile 'args4j:args4j:2.0.24'
+	// compile 'args4j:args4j:2.0.24'
 
 	// https://code.google.com/p/guava-libraries/
 	// google i/o library
 	// Has some really good stuff that we should use
-	compile 'com.google.guava:guava:14.0.1'
+	// compile 'com.google.guava:guava:14.0.1'
 
-	compile 'org.apache.commons:commons-lang3:3.1';
+	// compile 'org.apache.commons:commons-lang3:3.1';
 
 	// Good time library to have.
-	compile 'joda-time:joda-time:2.1'
+	// compile 'joda-time:joda-time:2.1'
 
 	// commons math has lots of good math functions to use
 	// http://mvnrepository.com/artifact/org.apache.commons/commons-math3/3.2
 	// http://commons.apache.org/proper/commons-math/userguide/stat.html
-	compile 'org.apache.commons:commons-math3:3.2'
+	// compile 'org.apache.commons:commons-math3:3.2'
 
 
 	// JSON library
 	// Basic library is directly included in the extra folder
 	//compile 'org.codehaus.jackson:jackson-mapper-asl:1.9.8'
 
-	compile 'commons-io:commons-io:2.4'
+	// compile 'commons-io:commons-io:2.4'
 
 	// For dependancy injection
 	// This is the way to go
