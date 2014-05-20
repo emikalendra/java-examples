@@ -8,3 +8,4 @@ output/
 bin/
 .idea/
 java-examples.iml
+classes/
