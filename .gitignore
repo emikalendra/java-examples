@@ -6,3 +6,5 @@ output/
 .project
 .settings/
 bin/
+.idea/
+java-examples.iml
